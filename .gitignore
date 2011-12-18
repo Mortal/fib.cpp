@@ -1,3 +1,5 @@
 fib
 fib.o
 lookup.o
+fib.s
+fibdebug.o
