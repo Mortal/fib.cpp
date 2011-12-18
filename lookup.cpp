@@ -7,12 +7,13 @@
 /* by default, we cannot output 128 bit integers. implement the output
  * operator. */
 /* {{{ */
+#ifdef FIB128
 std::ostream & operator<<(std::ostream & in, unsigned __int128 v) {
   if (v <= 0xFFFFFFFFFFFFFFFF) {
     return in << (unsigned long long) v;
   }
   char c[100];
-  char *x = c+100;
+  char *x = c+99;
   *x = 0;
   while (v) {
     *--x = '0'+(v%10);
@@ -20,13 +21,14 @@ std::ostream & operator<<(std::ostream & in, unsigned __int128 v) {
   }
   return in << x;
 }
+#endif
 /* }}} */
 
 /* Speed testing. */
 /* {{{ */
 static volatile size_t calcs = 0;
 
-void sighandler(int sig) {
+void sighandler(int) {
   std::cout << calcs << std::endl;
   exit(0);
 }

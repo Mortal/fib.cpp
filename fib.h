@@ -2,7 +2,11 @@
 typedef unsigned int input_t;
 
 /* output can be very large */
+#ifdef FIB128
+typedef unsigned __int128 output_t;
+#else
 typedef unsigned long long output_t;
+#endif
 
 output_t fibarray(input_t n);
 output_t fibsearch(input_t n);
