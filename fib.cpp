@@ -20,11 +20,11 @@ struct fibarrayimpl<0> {
 template<input_t N>
 struct fibarrayimpl {
   output_t list[0];
+  fibarrayimpl<N-1> rest; // this resembles a linked list, but is kept
+                          // sequentially in memory
   output_t cur;
-  fibarrayimpl<N-1> rest; // this resembles a linked list, but is kept sequentially
-                      // in memory
   inline fibarrayimpl() : cur(fib<N>::val) {}
-  inline output_t operator[](input_t n) {return list[N-n];}
+  inline output_t operator[](input_t n) {return list[n];}
 };
 /* }}} */
 
