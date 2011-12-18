@@ -1,19 +1,24 @@
-CPPFLAGS=-O3 -Wall -Wextra -Wno-type-limits
+CPPFLAGS=-O3 -Wall -Wextra -Wno-type-limits -fno-guess-branch-probability
 OBJECTS=fib.o lookup.o
-PROGRAM=fib
 
-all: $(PROGRAM)
+all: fib
 
-$(PROGRAM): $(OBJECTS)
+fib: $(OBJECTS)
 	$(CXX) $(CPPFLAGS) -o $@ $^
 
 clean:
-	rm -f $(OBJECTS) $(PROGRAM) fibdebug.o fib.s
+	rm -f $(OBJECTS) fib fibdebug.o fib.s fib32.s fibdump.s
 
-test: $(PROGRAM)
-	seq 0 10 | ./$(PROGRAM)
+test: fib
+	seq 0 10 | ./fib
 
-fib.s: fibdebug.o
+fib.s: fib.cpp
+	$(CXX) $(CPPFLAGS) -S -o - $^ | grep -v '^\.L[VBFC]' > $@
+
+fib32.s: fib.cpp
+	$(CXX) -m32 $(CPPFLAGS) -S -o - $^ | grep -v '^\.L[VBFC]' > $@
+
+fibdump.s: fibdebug.o
 	objdump -S $^ > $@
 
 fibdebug.o: fib.cpp
