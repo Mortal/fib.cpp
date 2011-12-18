@@ -12,7 +12,11 @@ clean:
 test: fib
 	seq 0 10 | ./fib
 
-.PHONY: all symbolic clean test
+speedtest: fib
+	./fib speedarray & sleep 5; kill $$!; wait
+	./fib speedsearch & sleep 5; kill $$!; wait
+
+.PHONY: all symbolic clean test speedtest
 
 # Executable targets
 
@@ -32,6 +36,9 @@ fib32.s: fib.cpp
 
 fibdump.s: fibdebug.o
 	objdump -S $^ > $@
+
+lookup.s: lookup.cpp
+	$(CXX) $(CPPFLAGS) -S -o - $^ | grep -v '^\.L[VBFC]' > $@
 
 # Relocatable targets
 

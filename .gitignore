@@ -1,9 +1,4 @@
 fib
-fib.o
-lookup.o
-fib.s
-fibdebug.o
 fib128
-fib128.o
-fib32.s
-lookup128.o
+*.o
+*.s
