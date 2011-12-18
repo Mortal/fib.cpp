@@ -1,16 +1,28 @@
 CPPFLAGS=-O3 -Wall -Wextra -Wno-type-limits -fno-guess-branch-probability
-OBJECTS=fib.o lookup.o
 
-all: fib
+# Driver targets
 
-fib: $(OBJECTS)
-	$(CXX) $(CPPFLAGS) -o $@ $^
+all: fib fib128
+
+symbolic: fib.s fib32.s
 
 clean:
-	rm -f $(OBJECTS) fib fibdebug.o fib.s fib32.s fibdump.s
+	rm -f *.o *.s fib fib128
 
 test: fib
 	seq 0 10 | ./fib
+
+.PHONY: all symbolic clean test
+
+# Executable targets
+
+fib: fib.o lookup.o
+	$(CXX) $(CPPFLAGS) -o $@ $^
+
+fib128: fib128.o lookup128.o
+	$(CXX) $(CPPFLAGS) -DFIB128 -o $@ $^
+
+# Symbolic targets
 
 fib.s: fib.cpp
 	$(CXX) $(CPPFLAGS) -S -o - $^ | grep -v '^\.L[VBFC]' > $@
@@ -21,9 +33,18 @@ fib32.s: fib.cpp
 fibdump.s: fibdebug.o
 	objdump -S $^ > $@
 
+# Relocatable targets
+
 fibdebug.o: fib.cpp
 	$(CXX) $(CPPFLAGS) -g -c -o $@ $^
 
-fib.cpp: fib.h
+fib128.o: fib.cpp
+	$(CXX) $(CPPFLAGS) -DFIB128 -c -o $@ $^
 
+lookup128.o: lookup.cpp
+	$(CXX) $(CPPFLAGS) -DFIB128 -c -o $@ $^
+
+# Source-level dependencies
+
+fib.cpp: fib.h
 lookup.cpp: fib.h
