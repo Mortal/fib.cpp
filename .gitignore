@@ -2,3 +2,5 @@ fib
 fib128
 *.o
 *.s
+.*.swp
+fibdebug

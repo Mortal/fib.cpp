@@ -6,6 +6,8 @@ all: fib fib128
 
 symbolic: fib.s fib32.s
 
+debug: fibdebug
+
 clean:
 	rm -f *.o *.s fib fib128
 
@@ -22,6 +24,9 @@ speedtest: fib
 
 fib: fib.o lookup.o
 	$(CXX) $(CPPFLAGS) -o $@ $^
+
+fibdebug: fibdebug.o lookupdebug.o
+	$(CXX) $(CPPFLAGS) -g -o $@ $^
 
 fib128: fib128.o lookup128.o
 	$(CXX) $(CPPFLAGS) -DFIB128 -o $@ $^
@@ -45,6 +50,9 @@ lookup.s: lookup.cpp
 fibdebug.o: fib.cpp
 	$(CXX) $(CPPFLAGS) -g -c -o $@ $^
 
+lookupdebug.o: lookup.cpp
+	$(CXX) $(CPPFLAGS) -g -c -o $@ $^
+
 fib128.o: fib.cpp
 	$(CXX) $(CPPFLAGS) -DFIB128 -c -o $@ $^
 
@@ -53,5 +61,5 @@ lookup128.o: lookup.cpp
 
 # Source-level dependencies
 
-fib.cpp: fib.h
+fib.cpp: fib.h tctc.h
 lookup.cpp: fib.h
