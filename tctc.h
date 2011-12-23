@@ -41,10 +41,18 @@ struct tctc {
   template <input_t lo, input_t hi, bool terminate = false>
   struct linearsearcher {
     static inline output_t find(input_t n, output_t def) {
-      if (lo == n)
-	return calc<lo>::val;
-
-      return linearsearcher<lo+1, hi, lo+1 >= hi>::find(n, def);
+      switch (n) {
+	case lo+0: return calc<lo+0>::val;
+	case lo+1: return calc<lo+1>::val;
+	case lo+2: return calc<lo+2>::val;
+	case lo+3: return calc<lo+3>::val;
+	case lo+4: return calc<lo+4>::val;
+	case lo+5: return calc<lo+5>::val;
+	case lo+6: return calc<lo+6>::val;
+	case lo+7: return calc<lo+7>::val;
+	default:
+	  return linearsearcher<lo+8, hi, lo+8 >= hi>::find(n, def);
+      }
     }
   };
 
