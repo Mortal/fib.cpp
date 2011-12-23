@@ -17,6 +17,7 @@ test: fib
 speedtest: fib
 	./fib speedarray & sleep 5; kill $$!; wait
 	./fib speedsearch & sleep 5; kill $$!; wait
+	./fib speedlinear & sleep 5; kill $$!; wait
 
 .PHONY: all symbolic clean test speedtest
 
@@ -61,5 +62,5 @@ lookup128.o: lookup.cpp
 
 # Source-level dependencies
 
-fib.cpp: fib.h tctc.h
-lookup.cpp: fib.h
+fib.o: fib.cpp fib.h tctc.h
+lookup.o: lookup.cpp fib.h

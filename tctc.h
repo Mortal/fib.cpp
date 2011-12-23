@@ -38,6 +38,27 @@ struct tctc {
     return binarysearcher<0, max+1>::find(n);
   }
 
+  template <input_t lo, input_t hi, bool terminate = false>
+  struct linearsearcher {
+    static inline output_t find(input_t n, output_t def) {
+      if (lo == n)
+	return calc<lo>::val;
+
+      return linearsearcher<lo+1, hi, lo+1 >= hi>::find(n, def);
+    }
+  };
+
+  template <input_t lo, input_t hi>
+  struct linearsearcher<lo, hi, true> {
+    static inline output_t find(input_t, output_t def) {
+      return def;
+    }
+  };
+
+  static output_t linearsearch(input_t n, output_t def = 0) {
+    return linearsearcher<0, max>::find(n, def);
+  }
+
   struct array {
     output_t list[0];
     partialarray<output_t, calc, max> array;

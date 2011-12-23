@@ -65,7 +65,9 @@ int main(int argc, char ** argv) {
   if (argc > 1 && std::string(argv[1]) == "speedarray") {
     speed<fibarray>();
   } else if (argc > 1 && std::string(argv[1]) == "speedsearch") {
-    speed<fibsearch>();
+    speed<fibbinarysearch>();
+  } else if (argc > 1 && std::string(argv[1]) == "speedlinear") {
+    speed<fiblinearsearch>();
   }
   input_t i;
   while (std::cin >> i) {
@@ -74,10 +76,17 @@ int main(int argc, char ** argv) {
       continue;
     }
 
-    std::cout << fibarray(i) << std::endl;
-    //std::cout << fibsearch(i) << std::endl;
+    output_t fibn = fibarray(i);
+    std::cout << fibn << std::endl;
 
-    if (fibarray(i) != fibsearch(i)) *((char*)42)='*'; // segfault
+    if (fibn != fibbinarysearch(i)) {
+      std::cerr << "fibarray disagrees with fibbinary" << std::endl;
+      *((char*)42)='*'; // segfault
+    }
+    if (fibn != fiblinearsearch(i)) {
+      std::cerr << "fibarray disagrees with fiblinear" << std::endl;
+      *((char*)42)='*'; // segfault
+    }
   }
 }
 // vim:set sw=2 ts=8 sts=2:

@@ -9,7 +9,8 @@ typedef unsigned long output_t;
 #endif
 
 output_t fibarray(input_t n);
-output_t fibsearch(input_t n);
+output_t fibbinarysearch(input_t n);
+output_t fiblinearsearch(input_t n);
 
 /* now, let's calculate the Nth fibonacci number, where N is known at compile
  * time. */
