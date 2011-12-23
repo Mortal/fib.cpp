@@ -1,5 +1,7 @@
 CPPFLAGS=-O3 -Wall -Wextra -Wno-type-limits -fno-guess-branch-probability
 
+FIBCPPDEP=fib.cpp fib.h tctc.h
+
 # Driver targets
 
 all: fib fib128
@@ -34,11 +36,11 @@ fib128: fib128.o lookup128.o
 
 # Symbolic targets
 
-fib.s: fib.cpp
-	$(CXX) $(CPPFLAGS) -S -o - $^ | grep -v '^\.L[VBFC]' > $@
+fib.s: $(FIBCPPDEP)
+	$(CXX) $(CPPFLAGS) -S -o - fib.cpp | grep -v '^\.L[VBFC]' > $@
 
-fib32.s: fib.cpp
-	$(CXX) -m32 $(CPPFLAGS) -S -o - $^ | grep -v '^\.L[VBFC]' > $@
+fib32.s: $(FIBCPPDEP)
+	$(CXX) -m32 $(CPPFLAGS) -S -o - fib.cpp | grep -v '^\.L[VBFC]' > $@
 
 fibdump.s: fibdebug.o
 	objdump -S $^ > $@
@@ -48,19 +50,19 @@ lookup.s: lookup.cpp
 
 # Relocatable targets
 
-fibdebug.o: fib.cpp
-	$(CXX) $(CPPFLAGS) -g -c -o $@ $^
+fibdebug.o: $(FIBCPPDEP)
+	$(CXX) $(CPPFLAGS) -g -c -o $@ fib.cpp
 
 lookupdebug.o: lookup.cpp
 	$(CXX) $(CPPFLAGS) -g -c -o $@ $^
 
-fib128.o: fib.cpp
-	$(CXX) $(CPPFLAGS) -DFIB128 -c -o $@ $^
+fib128.o: $(FIBCPPDEP)
+	$(CXX) $(CPPFLAGS) -DFIB128 -c -o $@ fib.cpp
 
 lookup128.o: lookup.cpp
 	$(CXX) $(CPPFLAGS) -DFIB128 -c -o $@ $^
 
 # Source-level dependencies
 
-fib.o: fib.cpp fib.h tctc.h
+fib.o: $(FIBCPPDEP)
 lookup.o: lookup.cpp fib.h
